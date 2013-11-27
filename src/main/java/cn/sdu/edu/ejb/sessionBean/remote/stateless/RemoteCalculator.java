@@ -1,4 +1,4 @@
-package cn.sdu.edu.ejb.remote.stateless;
+package cn.sdu.edu.ejb.sessionBean.remote.stateless;
 
 /**
  * 
@@ -9,7 +9,5 @@ package cn.sdu.edu.ejb.remote.stateless;
 public interface RemoteCalculator {
 
     int add(int a, int b);
-
-    int subtract(int a, int b);
 
 }
