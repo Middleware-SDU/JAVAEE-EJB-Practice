@@ -4,7 +4,7 @@ import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateful;
 
-import cn.sdu.edu.ejb.sessionBean.lcoal.stateful.LocalCounter;
+import cn.sdu.edu.ejb.sessionBean.local.stateful.LocalCounter;
 import cn.sdu.edu.ejb.sessionBean.remote.stateful.RemoteCounter;
 
 /**

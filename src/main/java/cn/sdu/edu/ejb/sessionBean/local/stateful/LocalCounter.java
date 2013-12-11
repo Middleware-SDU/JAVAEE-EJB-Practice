@@ -1,4 +1,4 @@
-package cn.sdu.edu.ejb.sessionBean.lcoal.stateful;
+package cn.sdu.edu.ejb.sessionBean.local.stateful;
 
 /**
  * 
