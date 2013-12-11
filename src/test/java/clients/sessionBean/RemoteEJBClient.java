@@ -1,8 +1,9 @@
-package cn.sdu.edu.ejb.client.sessionBean;
+package clients.sessionBean;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+
 import cn.sdu.edu.ejb.sessionBean.bean.stateful.CounterBean;
 import cn.sdu.edu.ejb.sessionBean.bean.stateless.CalculatorBean;
 import cn.sdu.edu.ejb.sessionBean.remote.stateful.RemoteCounter;
@@ -15,6 +16,16 @@ import cn.sdu.edu.ejb.sessionBean.remote.stateless.RemoteCalculator;
  */
 
 public class RemoteEJBClient {
+
+    public static Context context = null;
+
+    static {
+        try {
+            context = new InitialContext();
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) throws Exception {
         // 调用无状态Bean
@@ -80,15 +91,6 @@ public class RemoteEJBClient {
      * @throws NamingException
      */
     private static RemoteCalculator lookupRemoteStatelessCalculator() throws NamingException {
-
-        /*
-        final Hashtable<String, String> jndiProperties = new Hashtable<>();
-        jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-        final Context context = new InitialContext(jndiProperties);
-        */
-
-        final Context context = new InitialContext();
-
         /* appName指的是应用的名字，一般是ear的名字，当前的应用不存在ear，所以appName为空  */
         final String appName = "";
         /* moduleName指的是部署在server上的模块的名字，一般是jar的名字  */
@@ -111,14 +113,6 @@ public class RemoteEJBClient {
      * @throws NamingException
      */
     private static RemoteCounter lookupRemoteStatefulCounter() throws NamingException {
-
-        /*
-        final Hashtable<String, String> jndiProperties = new Hashtable<>();
-        jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-        final Context context = new InitialContext(jndiProperties);
-        */
-
-        final Context context = new InitialContext();
 
         final String appName = "";
         final String moduleName = "sdu-ejb-app";
