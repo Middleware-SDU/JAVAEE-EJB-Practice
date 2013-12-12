@@ -3,8 +3,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.sdu.edu.middleware</groupId>
-    <artifactId>JAVAEE-EJB-Practice</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>sdu-ejb-app</artifactId>
+    <packaging>war</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <name>JAVAEE EJB Practice</name>
 
@@ -23,8 +23,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <junit.version>4.10</junit.version>
     </properties>
 
     <dependencies>
@@ -33,19 +31,6 @@
             <artifactId>commons-lang</artifactId>
             <version>2.4</version>
             <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit-dep</artifactId>
-            <version>4.10</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -62,20 +47,6 @@
             <version>1.0.0.Final</version>
             <type>pom</type>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.arquillian</groupId>
-            <artifactId>arquillian-bom</artifactId>
-            <version>1.0.2.Final</version>
-            <scope>test</scope>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
-            <version>1.0.2.Final</version>
-            <scope>test</scope>
         </dependency>
 
         <!-- Logging API. -->
@@ -112,7 +83,6 @@
             <version>7.1.1.Final</version>
             <type>pom</type>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -120,6 +90,12 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
+                <configuration>
+                    <compilerVersion>1.7</compilerVersion>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
@@ -130,148 +106,45 @@
                 <version>2.8.1</version>
             </plugin>
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12.1</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <warSourceExcludes>src/main/java/**</warSourceExcludes>
+                    <warName>${project.artifactId}</warName>
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                </configuration>
             </plugin>
         </plugins>
 
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+
         <resources>
             <resource>
-                <directory>${project.build.sourceDirectory}</directory>
-                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
                 <includes>
-                    <include>**/*.properties</include>
                     <include>**/*.xml</include>
                 </includes>
             </resource>
         </resources>
-
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
-                <filtering>true</filtering>
                 <includes>
-                    <include>**/*.yml</include>
-                    <include>**/*.xml</include>
                     <include>**/*.properties</include>
                 </includes>
             </testResource>
         </testResources>
+
     </build>
-
-    <profiles>
-        <profile>
-            <id>jbossas-managed-7</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>arquillian</name>
-                    <value>jbossas-managed-7</value>
-                </property>
-            </activation>
-
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.spec</groupId>
-                    <artifactId>jboss-javaee-6.0</artifactId>
-                    <version>1.0.0.Final</version>
-                    <type>pom</type>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.as</groupId>
-                    <artifactId>jboss-as-arquillian-container-managed</artifactId>
-                    <version>7.1.1.Final</version>
-                    <scope>test</scope>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>org.jboss.shrinkwrap</groupId>
-                            <artifactId>shrinkwrap-impl-base</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-                            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.arquillian.protocol</groupId>
-                    <artifactId>arquillian-protocol-servlet</artifactId>
-                    <version>1.0.2.Final</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <systemProperties>
-                                <arquillian.launch>jbossas-managed-7</arquillian.launch>
-                                <arquillian>jbossas-managed-7</arquillian>
-                            </systemProperties>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>jbossas-remote-7</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>arquillian</name>
-                    <value>jbossas-remote-7</value>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.spec</groupId>
-                    <artifactId>jboss-javaee-6.0</artifactId>
-                    <version>1.0.0.Final</version>
-                    <type>pom</type>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.as</groupId>
-                    <artifactId>jboss-as-arquillian-container-remote</artifactId>
-                    <version>7.1.1.Final</version>
-                    <scope>test</scope>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>org.jboss.shrinkwrap</groupId>
-                            <artifactId>shrinkwrap-impl-base</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-                            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.arquillian.protocol</groupId>
-                    <artifactId>arquillian-protocol-servlet</artifactId>
-                    <version>1.0.2.Final</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <systemProperties>
-                                <arquillian.launch>jbossas-remote-7</arquillian.launch>
-                                <arquillian>jbossas-remote-7</arquillian>
-                            </systemProperties>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>
